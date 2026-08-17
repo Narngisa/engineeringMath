@@ -11,6 +11,6 @@ fn main() {
     // f(x) = (x^2 + 3x) / (x + 1)
     let fx = (x.powf(2.0) + (c3 * x)) / (x + c1);
 
-    println!("Value f(2): {}", fx.val);      // 10.0 / 3.0 ≈ 3.3333
+    println!("Value f(2): {}", fx.val); // 10.0 / 3.0 ≈ 3.3333
     println!("Derivative f'(2): {}", fx.der); // (7*3 - 10*1) / 9 = 11/9 ≈ 1.2222
 }
