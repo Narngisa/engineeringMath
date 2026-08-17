@@ -1,29 +1,66 @@
 #![allow(dead_code)]
 
-pub fn diff_1(_c: f64) -> f64 {
-    0.0
+use std::ops::{Add, Div, Mul, Sub};
+
+#[derive(Debug, Clone, Copy)]
+pub struct Dual {
+    pub val: f64,
+    pub der: f64,
 }
 
-pub fn diff_2(a: f64, _x: &str) -> f64 {
-    a
+impl Dual {
+    pub fn new_x(val: f64) -> Self {
+        Dual { val, der: 1.0 }
+    }
+
+    pub fn new_const(val: f64) -> Self {
+        Dual { val, der: 0.0 }
+    }
+
+    pub fn powf(self, n: f64) -> Self {
+        Dual {
+            val: self.val.powf(n),
+            der: n * self.val.powf(n - 1.0) * self.der,
+        }
+    }
 }
 
-pub fn diff_3(c: f64, u: &str) -> f64 {
-    c * diff_2(1.0, u)
+impl Add for Dual {
+    type Output = Dual;
+    fn add(self, other: Dual) -> Dual {
+        Dual {
+            val: self.val + other.val,
+            der: self.der + other.der,
+        }
+    }
 }
 
-pub fn diff_4_add(du: f64, dv: f64) -> f64 {
-    du + dv
+impl Sub for Dual {
+    type Output = Dual;
+    fn sub(self, other: Dual) -> Dual {
+        Dual {
+            val: self.val - other.val,
+            der: self.der - other.der,
+        }
+    }
 }
 
-pub fn diff_4_sub(du: f64, dv: f64) -> f64 {
-    du - dv
+impl Mul for Dual {
+    type Output = Dual;
+    fn mul(self, other: Dual) -> Dual {
+        Dual {
+            val: self.val * other.val,
+            der: self.val * other.der + other.val * self.der,
+        }
+    }
 }
 
-pub fn diff_5(u: f64, du: f64, v: f64, dv: f64) -> f64 {
-    u * dv + v * du
-}
-
-pub fn diff_6(u: f64, du: f64, v: f64, dv: f64) -> f64 {
-    (v * du - u * dv) / (v * v)
+impl Div for Dual {
+    type Output = Dual;
+    fn div(self, other: Dual) -> Dual {
+        Dual {
+            val: self.val / other.val,
+            der: (other.val * self.der - self.val * other.der) / (other.val * other.val),
+        }
+    }
 }
