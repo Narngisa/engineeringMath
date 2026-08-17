@@ -4,3 +4,12 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+
+[dev-dependencies]
+
+# Development profile configuration for fast builds and full debug symbols
+[profile.dev]
+opt-level = 0          # Fast compilation
+debug = true           # Include full debug information
+overflow-checks = true # Catch integer and math overflow bugs in dev
+incremental = true     # Enable incremental compilation
